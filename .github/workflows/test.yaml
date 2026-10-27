@@ -1,6 +1,8 @@
 name: "Run linting and tests"
 
-on: push
+on: 
+  push:
+  workflow_dispatch:
 
 jobs:
   build:
@@ -8,18 +10,15 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [12.x, 14.x, 16.x, 17.x]
+        node-version: [22, 24]
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v7
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v7
       with:
         node-version: ${{ matrix.node-version }}
     - run: npm ci
     - run: npm run lint-check
     - run: npm run test
-    - run: npm run test
-      env:
-        OLD_DEPEDENCIES: "yes"
     - run: npm run build

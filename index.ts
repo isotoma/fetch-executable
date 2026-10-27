@@ -315,7 +315,7 @@ const extractDirectoryFromTarAndSave = (inStream: NodeJS.ReadableStream, dirPath
                 return false;
             },
             strip: stripCount,
-        } as tar.ExtractOptions);
+        } as tar.TarOptionsWithAliasesAsyncNoFile);
 
         inStream.pipe(stream);
 
@@ -464,7 +464,10 @@ export const fetchExecutable = async (options: FetchExecutableOptions): Promise<
         isVerbose: true,
     });
 
-    const contentLengthRaw: string | undefined = (response.headers && response.headers['content-length']) ?? undefined;
+    // axios types header values as string | number | boolean | string[] | AxiosHeaders;
+    // content-length arrives as a string at runtime, so normalise rather than assert.
+    const contentLengthHeader = response.headers ? response.headers['content-length'] : undefined;
+    const contentLengthRaw: string | undefined = contentLengthHeader == null ? undefined : String(contentLengthHeader);
     const contentLength: number | undefined = contentLengthRaw ? parseInt(contentLengthRaw, 10) : undefined;
 
     let bytesDownloaded = 0;

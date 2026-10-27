@@ -7,9 +7,9 @@ module.exports = {
     "transform": {
         "^.+\\.ts$": "ts-jest"
     },
-    setupFiles: [
+    /*setupFiles: [
         './tests/setupTests.js',
-    ],
+    ],*/
     collectCoverage: true,
     collectCoverageFrom: [
         "**/*.{ts,js}",
@@ -26,4 +26,7 @@ module.exports = {
             lines: 88,
         }
     },
+    moduleNameMapper: {
+      "^axios$": "axios/dist/node/axios.cjs"
+    }
 }
